@@ -5,7 +5,7 @@
   <parent>
     <artifactId>joojle</artifactId>
     <groupId>ir.jimbo</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
   </parent>
   <properties>
     <hbase.version>1.4.10</hbase.version>
