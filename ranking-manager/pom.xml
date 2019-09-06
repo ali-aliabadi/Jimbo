@@ -90,9 +90,6 @@
     </repositories>
 
     <build>
-        <pluginManagement>
-
-        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
