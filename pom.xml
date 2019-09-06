@@ -20,6 +20,7 @@
         <module>search-api</module>
         <module>ranking-manager</module>
         <module>es-page-migrator</module>
+        <module>web-graph</module>
     </modules>
 
     <properties>
@@ -70,6 +71,7 @@
             <artifactId>metrics-jmx</artifactId>
             <version>4.1.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>

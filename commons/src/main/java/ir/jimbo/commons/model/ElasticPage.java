@@ -2,12 +2,14 @@ package ir.jimbo.commons.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class ElasticPage {
     private String url;
     private String title;
@@ -19,7 +21,12 @@ public class ElasticPage {
     private String lang;
     private String id;
     private double pageRank;
+    private double rank;
+    private double pageRank;
     private String category;
+    private String suggest;
+    private int numberOfReferences;
+    private List<String> topAnchors;
 
     public ElasticPage() {
         this.url = "";
@@ -33,6 +40,7 @@ public class ElasticPage {
         this.id = "";
         this.pageRank = 1;
         this.category = "";
+        this.suggest = "";
     }
 
     // Map page to ElasticPage
@@ -69,5 +77,7 @@ public class ElasticPage {
                 stringBuilder.append(" ");
         }
         text = stringBuilder.toString();
+        String h1 = h1List.stream().reduce("", (s1, s2) -> s1 + " " + s2);
+        suggest = h1 + " " + title;
     }
 }

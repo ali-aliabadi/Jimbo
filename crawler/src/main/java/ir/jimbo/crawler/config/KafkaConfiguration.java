@@ -23,6 +23,7 @@ public class KafkaConfiguration {
     private String hBasePageTopicName;
     private String elasticPageTopicName;
     private String linkTopicName;
+    private String shuffledLinkTopicName;
     private int pollDuration;
     private String autoOffsetReset;
     private String autoCommit;
@@ -31,6 +32,7 @@ public class KafkaConfiguration {
     private String groupId;
     private String clientId;
     private String bootstrapServers;
+    private int minFetchSize;
 
     public KafkaConfiguration() throws IOException {
         Properties properties = new Properties();
@@ -50,6 +52,7 @@ public class KafkaConfiguration {
         elasticPageTopicName = properties.getProperty("elastic.pages.topic.name");
         pollDuration = Integer.parseInt(properties.getProperty("poll.duration"));
         linkTopicName = properties.getProperty("links.topic.name");
+        shuffledLinkTopicName = properties.getProperty("shuffled.links.topic.name");
         autoOffsetReset = properties.getProperty("auto.offset.reset");
         autoCommit = properties.getProperty("auto.commit");
         maxPollRecord = Integer.parseInt(properties.getProperty("max.poll.record"));
@@ -57,6 +60,7 @@ public class KafkaConfiguration {
         clientId = properties.getProperty("client.id");
         bootstrapServers = properties.getProperty("bootstrap.servers");
         maxPollInterval = Integer.parseInt(properties.getProperty("max.poll.interval"));
+//        minFetchSize = Integer.parseInt(properties.getProperty("kafka.consumer.fetch.min.bytes"));
     }
 
     public int getPollDuration() {
@@ -95,8 +99,10 @@ public class KafkaConfiguration {
         consumerProperties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, maxPollInterval);
         consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, autoCommit);
         consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
+//        consumerProperties.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, minFetchSize);
         Consumer<Long, String> consumer = new KafkaConsumer<>(consumerProperties);
-        consumer.subscribe(Collections.singletonList(linkTopicName));
+        System.err.println("shuffled links topic name : " + shuffledLinkTopicName);
+        consumer.subscribe(Collections.singletonList(shuffledLinkTopicName));
         return consumer;
     }
 
