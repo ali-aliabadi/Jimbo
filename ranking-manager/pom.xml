@@ -14,6 +14,7 @@
     <properties>
         <elasticsearch.version>6.3.2</elasticsearch.version>
         <spark.version>2.3.3</spark.version>
+
         <hbase.version>1.4.10</hbase.version>
         <elasticsearch.spark.version>6.3.2</elasticsearch.spark.version>
         <jackson.version>2.6.5</jackson.version>
