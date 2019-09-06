@@ -31,7 +31,7 @@ public class LinkConsumerTest {
         redisServer = new RedisServer(6380);
         redisServer.start();
         RedisConfiguration redisConfiguration = new RedisConfiguration();
-        cacheService = new CacheService(redisConfiguration, metrics.getProperty("crawler.redis.health.name"));
+        cacheService = new CacheService(redisConfiguration);
     }
 
     @After
@@ -55,16 +55,22 @@ public class LinkConsumerTest {
         kafkaConsumer.seek(new TopicPartition("testTopic", 0), 0);
         kafkaConsumer.addRecord(new ConsumerRecord<>(
                 "testTopic", 0, 0, 1L, "https://stackoverflow.com"));
+        kafkaConsumer.addRecord(new ConsumerRecord<>(
+                "testTopic", 0, 0, 2L, "https://ssdftackoverflow.com"));
         new Thread(() -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } finally {
+                consumer.interrupt();
             }
-            consumer.interrupt();
         }).start();
+        System.err.println("before running consumer");
         consumer.run();
+        System.err.println("before add to queue");
         String link = queue.take();
+        System.err.println("after getting from queue");
         Assert.assertEquals(link, "https://stackoverflow.com");
     }
 

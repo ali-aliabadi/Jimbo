@@ -29,11 +29,11 @@ public class App {
     private static AtomicBoolean repeat = new AtomicBoolean(true);
     public static boolean produceLink = true;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         LOGGER.info("crawler app starting...");
         initializeConfigurations(args);
         MetricConfiguration metrics = MetricConfiguration.getInstance();    // Throws IOException
-        CacheService cacheService = new CacheService(redisConfiguration, metrics.getProperty("crawler.redis.health.name"));
+        CacheService cacheService = new CacheService(redisConfiguration);
         queue = new ArrayBlockingQueue<>(appConfiguration.getQueueSize());
 
         int consumerThreadSize = appConfiguration.getLinkConsumerSize();
@@ -54,7 +54,10 @@ public class App {
         LOGGER.info("starting consumer threads");
         for (int i = 0; i < consumerThreadSize; i++) {
             consumers[i] = new LinkConsumer(kafkaConfiguration, cacheService, consumerLatch, queue, metrics);
-            consumers[i].start();
+        }
+        Thread.sleep(1000);
+        for (Thread consumer : consumers) {
+            consumer.start();
         }
         LOGGER.info("end starting threads");
         aliveThreadCounter(metrics);
@@ -94,7 +97,7 @@ public class App {
         }).start();
     }
 
-    static int getAllWakeConsumers() {
+    public static int getAllWakeConsumers() {
         int counter = 0;
         for (Thread consumer : consumers) {
             if (consumer.isAlive()) {
